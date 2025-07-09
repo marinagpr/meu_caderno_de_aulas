@@ -1,0 +1,67 @@
+---
+title: "Transformação Box-Cox"
+format: html
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+A transformação de Box-Cox é uma técnica estatística utilizada para
+transformar variáveis contínuas de forma a aproximar a normalidade e
+estabilizar a variância, sendo particularmente útil em análises que
+exigem estas premissas, como regressões lineares e ANOVA. Proposta por
+Box e Cox em 1964, a transformação aplica uma função matemática
+parametrizada por lambda (𝜆), que define o tipo de transformação a ser
+utilizada nos dados, variando desde a transformação logarítmica (quando
+𝜆 = 0) até outras formas como raiz quadrada ou inversa, conforme o valor
+de lambda que maximiza a verossimilhança dos dados transformados. A
+escolha do valor ótimo de 𝜆 é realizada de forma a garantir que os
+resíduos do modelo apresentem distribuição aproximadamente normal e
+variâncias homogêneas, melhorando a qualidade do ajuste e a
+confiabilidade dos testes estatísticos aplicados posteriormente. Assim,
+a transformação de Box-Cox é uma ferramenta prática no pré-processamento
+de dados, auxiliando na adequação dos conjuntos de dados às exigências
+dos métodos paramétricos utilizados em análises estatísticas
+
+```{r}
+#| message: false
+#| warning: false
+
+library(MASS)
+library(DHARMa)
+library(dplyr)
+insects <- InsectSprays
+
+m1 <- lm(count ~ spray, data = insects)
+plot(simulateResiduals(m1))
+
+b <- boxcox(lm(insects$count + 0.1 ~ 1))
+lambda <- b$x[which.max(b$y)]
+lambda
+
+insects <- insects |> 
+  dplyr::mutate(count2 = (count^lambda - 1) / lambda) |> 
+  dplyr::mutate(count3 = sqrt(count))
+
+hist(insects$count)
+
+```
+
+Este código fornece:
+
+-   Diagnóstico de resíduos do modelo linear (para avaliar se os
+    pressupostos são atendidos).
+
+-   O valor ótimo de lambda para a transformação de Box-Cox para seus
+    dados de contagem.
+
+-   Duas variáveis transformadas (count2 e count3) para futuras análises
+    com melhor conformidade aos pressupostos de normalidade e
+    homocedasticidade.
+
+-   Um histograma para visualizar a distribuição original antes de
+    verificar a transformação.
+
+Assim, ele prepara os dados para análises estatísticas mais robustas em
+dados de contagem, como ANOVA ou modelos lineares mistos, minimizando
+problemas de violação de pressupostos.

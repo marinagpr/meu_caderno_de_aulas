@@ -1,0 +1,53 @@
+{
+  "index.qmd": {
+    "index.html": "2fd34ce7"
+  },
+  "Aula_1.qmd": {
+    "Aula_1.html": "f92466ca"
+  },
+  "meu_caderno_de_aulas.qmd": {
+    "meu_caderno_de_aulas.html": "17d99de2"
+  },
+  "Introdução_ao_R.qmd": {
+    "Introdução_ao_R.html": "143ed7ef"
+  },
+  "Importando_dados.qmd": {
+    "Importando_dados.html": "65aa1e6b"
+  },
+  "graficos.qmd": {
+    "graficos.html": "63e469b8"
+  },
+  "Analises.qmd": {
+    "Analises.html": "c3a1f1c0"
+  },
+  "pacotedplyr.qmd": {
+    "pacotedplyr.html": "c9da26da"
+  },
+  "Untitled.qmd": {
+    "Untitled.html": "eb6f7305"
+  },
+  "nh_test.qmd": {
+    "nh_test.html": "c1cba9f6"
+  },
+  "test_t.qmd": {
+    "test_t.html": "075d4818"
+  },
+  "ANOVA.qmd": {
+    "ANOVA.html": "0d60ba03"
+  },
+  "KW_test.qmd": {
+    "KW_test.html": "a9b1fcfc"
+  },
+  "GLM.qmd": {
+    "GLM.html": "37771ea1"
+  },
+  "lm.qmd": {
+    "lm.html": "d4d8bb3b"
+  },
+  "boxcox.qmd": {
+    "boxcox.html": "6444fa99"
+  },
+  "mapa.qmd": {
+    "mapa.html": "d248b8fb"
+  }
+}

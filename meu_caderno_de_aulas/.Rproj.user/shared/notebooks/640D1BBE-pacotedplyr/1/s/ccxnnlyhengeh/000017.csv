@@ -1,0 +1,4 @@
+"0",""
+"0","dados_survey |>"
+"0","  group_by(residue) |>"
+"0","  count() #Conta quantas observações existem para cada tipo de residue."

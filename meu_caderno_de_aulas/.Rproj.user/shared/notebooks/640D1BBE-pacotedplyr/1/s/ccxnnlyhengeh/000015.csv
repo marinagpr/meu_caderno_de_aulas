@@ -1,0 +1,3 @@
+"0","dados_survey |>"
+"0","  group_by(species) |>"
+"0","  count() #Conta quantas observações existem em dados_survey para cada species."

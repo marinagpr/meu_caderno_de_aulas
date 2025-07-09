@@ -1,0 +1,63 @@
+---
+title: "ANOVA"
+format: html
+---
+
+ANOVA (Análise de Variância) é um teste estatístico utilizado para comparar as médias de três ou mais grupos e identificar se existe diferença significativa entre eles. Enquanto o teste t compara apenas dois grupos, a ANOVA permite avaliar múltiplos grupos simultaneamente, analisando a variabilidade total dos dados em variabilidade intra-grupos (dentro de cada grupo) e inter-grupos (entre as médias dos grupos). Se a variabilidade entre os grupos for significativamente maior do que a variabilidade dentro dos grupos, podemos concluir que pelo menos um dos grupos possui média diferente. Caso o valor de p obtido na ANOVA seja menor que 0,05, indica diferença significativa, sendo necessário realizar testes pós-hoc (como Tukey ou Dunnett) para identificar quais grupos diferem entre si. A ANOVA é amplamente utilizada em experimentos agrícolas, biológicos e clínicos por ser eficiente na análise de dados de múltiplos tratamentos.
+
+Exemplo:
+
+```{r}
+#| include: false
+library(car)
+library(gsheet)
+library(dplyr)
+library(ggplot2) # 
+micelial <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit?gid=959387827#gid=959387827")
+
+micelial %>%
+  ggplot(aes(x = especie, y = tcm)) +
+  geom_boxplot(outlier.color = NA) +
+  geom_jitter(width = 0.1)
+
+```
+
+```{r}
+anova1 <- aov(tcm ~ especie, data = micelial)
+anova2 <- lm(tcm ~ especie, data = micelial)
+ 
+anova(anova1)
+anova(anova2)
+
+```
+
+-   `aov()` é função direta para ANOVA.
+
+-   `lm()` ajusta um modelo linear, e `anova()` pode ser usada para obter a tabela ANOVA do modelo linear.
+
+-   `Df` (graus de liberdade).
+
+-   `Sum Sq` (soma de quadrados).
+
+-    `Mean Sq` (média dos quadrados).
+
+-    `F value` (estatística F).
+
+-    `Pr(>F)` (valor-p).
+
+-    Se `p < 0.05`, indica que pelo menos uma espécie tem taxa de crescimento diferente das outras.
+
+Nesse caso há diferença estatística significativa entre as médias de crescimento micelial das espécies avaliadas (`p < 0.001`). Isso indica que pelo menos uma das espécies apresenta taxa de crescimento significativamente diferente das demais.
+
+A partir da ANOVA testa-se se os resíduos são normais e homogeneidade das variâncias(`shapiro.test` e `hist`).
+
+#### Verificação das premissas da ANOVA
+
+```{r}
+hist(residuals(anova1))
+shapiro.test(residuals(anova1))
+```
+
+-   Os resíduos do modelo ANOVA seguem distribuição normal.
+
+-   A premissa de normalidade para a ANOVA foi atendida, permitindo confiar nos resultados do teste F.

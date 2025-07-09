@@ -1,0 +1,5 @@
+"0","#| message: false"
+"0","#| warning: false"
+"0",""
+"0","library(gsheet)"
+"0","cr <- gsheet2tbl(""https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit?gid=1871397229#gid=1871397229"")"

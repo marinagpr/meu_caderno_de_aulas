@@ -1,0 +1,26 @@
+---
+title: ""
+format: html
+---
+
+:::: conteudo-centralizado
+### **SEJAM BEM-VINDOS AO MEU SITE**
+
+![](images/imagem1.jpg){.foto-redonda fig-align="center"}
+
+## SOBRE MIM
+
+Eu sou **Marina Rodrigues**, formada Agronomia pela Universidade de Federal dos Vales do Jequitinhonha e Mucuri e, estudante de Mestrado do Programa de Pós-Graduação em Fitopatologia na Universidade Federal de Viçosa. Este é o meu caderno de aulas desenvolvido para a disciplina de Análise e Visualização de Dados (FIP606) ministrada pelo Prof. Dr. Emerson Del Ponte.
+
+## SOBRE A DISCIPLINA
+
+A disciplina de Análise e Visualização de Dados me permitiu compreender, explorar e interpretar diferentes conjuntos de dados de forma crítica e informada. Aprendi a organizar, limpar e separar dados para análises, reconhecendo os diferentes tipos de variáveis e suas características. Desenvolvi a capacidade de aplicar métodos estatísticos descritívos e inferenciais como testes de normalidade, correlação, regressão e ANOVA, afim de identificar padrões, tendências e relações entre as variáveis observadas. Tive ensinamentos sobre como comunicar os resultados de maneira clara, como na plotagem de gráficos, tabelas e outras visualizações adequadas para todos os tipos de informação. Neste site espero mostra um pouco do que aprendi ao longo do semestre.
+
+## AGRADECIMENTO
+
+Agradeço ao Professor Emerson Del Ponte e ao monitor da disciplina Ricardo Gomes Tomáz por todos os ensinamentos passados. Tenho certeza de que tudo o que eu aprendi será muito útil para minha formação acadêmica.
+
+::: social-icons
+<a href="https://www.instagram.com/_marinagpr/" target="_blank" title="Instagram"> <i class="fab fa-instagram"></i> </a> <a href="https://www.linkedin.com/in/marina-rodrigues-74a227222/" target="_blank" title="LinkedIn"> <i class="fab fa-linkedin"></i> </a>
+:::
+::::

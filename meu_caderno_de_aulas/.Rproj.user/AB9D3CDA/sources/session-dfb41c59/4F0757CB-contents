@@ -1,0 +1,49 @@
+---
+title: "Importação de dados"
+format: html
+---
+
+### Leitura dos arquivos
+
+-   Baixar o pacote que ler dados em arquivos
+
+```{r}
+#| message: false
+#| warning: false
+library(tidyverse)
+```
+
+### Importar conjunto de dados disponíveis no **R**
+
+```{r}
+dados <- Orange
+Orange
+```
+
+### Importar conjunto de dados em planilhas do Google
+
+-   O primeiro passo é carregar o pacote `gsheet`
+
+```{r}
+library(gsheet)
+```
+
+-   Então importar a planilha a partir da função `gsheet2tbl` e o link do google
+
+```{r}
+dados_nuvem <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit?gid=465348652#gid=465348652")
+```
+
+### Importar conjunto de dados em arquivos excel
+
+-   Carregar o pacote `readxl`
+
+```{r}
+library(readxl)
+```
+
+-   Adicionar a planilha dentro da pasta do projeto;
+
+-   Importar os dados com a função `read_excel`
+
+-   Abrir um chunk colocar: dados \<- read_excel ("dados-exemplo.xlsx")

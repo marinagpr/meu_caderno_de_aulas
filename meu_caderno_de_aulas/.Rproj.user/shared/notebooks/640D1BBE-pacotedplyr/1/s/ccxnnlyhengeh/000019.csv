@@ -1,0 +1,4 @@
+"0",""
+"0","dados_survey |>"
+"0","  group_by(state, residue) |>"
+"0","  count() #Conta o número de observações para cada combinação de state e residue."

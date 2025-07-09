@@ -1,0 +1,17 @@
+"0","#| warning: false"
+"0","# Teste t entre os grupos control e Mg2"
+"0","attach(dat_mg2)"
+"0","t_test_results <- t.test(control, Mg2, var.equal = FALSE) #teste t para comparação de médias entre os tratamentos control e Mg2"
+"0","detach(dat_mg2)"
+"0",""
+"0","test_report <- report(t_test_results)"
+"2","In the report() function, for htest objects, you can try providing the data argument manually,
+  e.g., report(x, data = data).
+"
+"0","print(test_report) #relatório textual interpretativo do teste t, explicando p-valor, tamanho do efeito e interpretação."
+"1","Effect sizes were labelled following Cohen's (1988) recommendations.
+
+The Welch Two Sample t-test testing the difference between control and Mg2 (mean of x = 15.68, mean of y =
+10.52) suggests that the effect is positive, statistically significant, and large (difference = 5.16, 95%
+CI [3.83, 6.49], t(17.35) = 8.15, p < .001; Cohen's d = 3.92, 95% CI [2.30, 5.49])
+"

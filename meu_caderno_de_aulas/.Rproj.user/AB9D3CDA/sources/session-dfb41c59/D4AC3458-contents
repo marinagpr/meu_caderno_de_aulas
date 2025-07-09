@@ -1,0 +1,960 @@
+---
+title: "Aulas de Análise de Dados"
+---
+
+## Quarto
+
+# Item de cabeçalho
+
+Aqui vou escrever o texto do item 2, com letra em *italico*.
+
+Adicionarei um link: [Pasta da aula](https://1drv.ms/f/c/349aa65071139f34/EjhLo-yB3ZBPobylM7escWcBK90e60mEfmzNe3b7mVV4Ig?e=98Rrwg)
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+```{r}
+1 + 1
+```
+
+Vamos importar um conjunto de dados que está disponível no R.
+
+```{r}
+dados <- Orange
+Orange
+```
+
+```{r}
+circ<-dados$circumference
+circ2<-exp(circ)
+circ2
+circ3=log(circ2)
+```
+
+# Vamos adicionar uma variavel nova nos dados originais:
+
+```{r}
+dados
+dados$logcirc<-log(dados$circumference)
+dados
+```
+
+# Desagregar um conjunto de dados em variaveis independentes:
+
+```{r}
+attach(dados)
+circumference
+```
+
+Instalando pacotes no R:
+
+```{r}
+library(agricolae)
+library(tidyverse)
+dates <- c(14,21,28) # days
+severity <- c(40,80,90)
+severity
+audpc(severity,dates)
+
+data(corn)
+corn
+str(corn)
+```
+
+```{r}
+
+library(tidyverse)
+dates <- c(7,14,21,28,35,42) # days
+severity <- c(0.1,5,10,35,50,60)
+data_curva<-data.frame(dates,severity)
+data_curva
+# meu primeiro plot
+data_curva |>
+  mutate(severity2 = c(1,10,35,58,70,82)) |> 
+  ggplot(aes(dates,severity2))+
+  geom_col()+
+  geom_line(linewidth = 2,color="blue")+
+  geom_point(size = 5)+
+  theme_classic(base_size = 14)+
+  labs(x="Dia após o plantio",
+       y="severidade(%)")+
+  scale_y_continuous(limits = c(0,100),n.breaks = 10)+
+  scale_x_continuous(n.breaks = 8)
+```
+
+# Mudando as cores dos graficos
+
+```{r}
+data_curva |> 
+  mutate(severity2 = c(1,10,35,58,70,82)) |> 
+  ggplot(aes(dates, severity2)) +
+  geom_col(fill = "BLACK") +  # Barras em roxo
+  geom_line(linewidth = 2, color = "PURPLE") +  # Linha em roxo
+  geom_point(size = 5, color = "black") +  # Pontos em roxo
+  theme_classic(base_size = 14) +
+  labs(x = "Dia após o plantio",
+       y = "severidade(%)") +
+  scale_y_continuous(limits = c(0, 100), n.breaks = 10) +
+  scale_x_continuous(n.breaks = 8)
+
+```
+
+# Aula 2
+
+# Ler dados de arquivos
+
+```{r}
+library(tidyverse)
+```
+
+# Arquivo excel
+
+```{r}
+library(readxl)
+
+dados <- read_excel("dados-diversos.xlsx")
+dados
++ sheet - "sensibilidade_fungicidas"
+```
+
+```{r}
+str (dados)
+```
+
+```{r}
+glimpse(dados)
+```
+
+```{r}
+dados2 <- read_excel("dados-diversos.xlsx",
+                  sheet = "sensibilidade-fungicida")
+```
+
+```{r}
+str(dados2)
+```
+
+```{r}
+glimpse(dados2)
+```
+
+```{r}
+dados2 <- read_excel("dados-diversos.xlsx",
+                  sheet = "Planilha1")
+
+dados2
+```
+
+```{r}
+curve <- read.csv("Curva.csv")
+
+library(writexl)
+
+write_xlsx(curve, "Curva.csv")
+```
+
+# Importar usando google sheets
+
+```{r}
+
+library(gsheet)
+dados_nuvem <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit?gid=465348652#gid=465348652")
+
+dados_mg <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit?gid=983033137#gid=983033137")
+
+dados_survey <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit?gid=1118819738#gid=1118819738")
+
+library(dplyr)
+dados_survey |>
+  group_by(species) |>
+  count()
+
+dados_survey |>
+  group_by(residue) |>
+  count()
+
+dados_survey |>
+  group_by(state, residue) |>
+  count()
+
+RS <- dados_survey |>
+  filter(state== "RS")
+
+PR <- dados_survey |>
+  filter(state== "PR")
+
+combinado <- rbind(RS, PR)
+
+survey_b <- dados_survey |>
+  select(year, state, species)
+
+survey_b <- dados_survey |>
+  dplyr:: select(year, state, species)
+
+survey_2009 <- dados_survey |>
+  select(year, state, species) |>
+  filter(year== 2009)
+
+survey_2010 <- dados_survey |>
+  select(year, state, species) |>
+  filter(year== 2010)
+
+survey_2011 <- dados_survey |>
+  select(year, state, species) |>
+  filter(year== 2011)
+
+library(janitor)
+survey_b |>
+  tabyl(state, species)
+
+library(janitor)
+survey_b |>
+  tabyl(species, year)
+
+library(ggplot2)
+
+survey_b |>
+  group_by(year, species) |>
+  count() |>
+  ggplot(aes(year, n))
+
+survey_b |>
+  group_by(year, species) |>
+  count() |>
+  ggplot(aes(year, n, fill = species))+
+  geom_col()+
+  scale_fill_manual(values=c("purple","yellow"))
+
+survey_b |>
+  group_by(year, species) |>
+  count() |>
+  ggplot(aes(year, n, fill = species))+
+  geom_col()+
+  scale_fill_grey()
+
+survey_b |>
+  group_by(year, species) |>
+  count() |>
+  ggplot(aes(year, n, fill = species, color= species))+
+  geom_col()+
+  scale_fill_viridis_d()
+
+
+```
+
+```{r}
+mg <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit?gid=983033137#gid=983033137")
+library(ggthemes)
+library(ggplot2)
+plot_magnesio <- mg |>
+  ggplot(aes(trat, comp))+
+  geom_boxplot(fill = "white",
+               outlier.colour = NA)+
+  geom_jitter(width = 0.1)+
+  scale_y_continuous(limits = c(0,20) )+
+  labs(x= "Tratamento",
+       y= "Comprimento (mm)",
+       title = "Efeito do magnésio",
+       subtitle = "Tamanho da lesão de mancha",
+       caption = "Fonte (M. G. P. Rodrigues et al. 2021")+
+  theme_clean()
+```
+
+```{r}
+micelial <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit?gid=959387827#gid=959387827")
+
+library(ggplot2)
+library(ggthemes) # Para usar o tema theme_clean()
+
+plot_micelial <- micelial |> 
+  ggplot(aes(x = reorder(especie, tcm), y = tcm)) +
+  geom_boxplot(fill = "white", outlier.colour = NA) +
+  geom_jitter(width = 0.1) +
+  coord_flip() +
+  labs(
+    x = "Espécie",
+    y = "TCM (mm)",
+    title = "Taxa de crescimento micelial",
+    caption = "Fonte: M. G. P. Rodrigues et al. (2021)"
+  ) +
+  theme_clean()
+```
+
+```{r}
+library(patchwork)
+(plot_magnesio|plot_micelial)+
+  plot_annotation(tag_levels = "A")
+ggsave("Combo1.png", bg = "white",
+       width = 8, height = 4)
+```
+
+# Aula 03
+
+```{r}
+
+# Código R organizado, funcional e comentado para análise de Mg utilizando pivot_wider, gráficos e testes
+
+# Instalação e carregamento de pacotes necessários
+if (!require(gsheet)) install.packages('gsheet')
+if (!require(ggplot2)) install.packages('ggplot2')
+if (!require(tidyr)) install.packages('tidyr')
+if (!require(dplyr)) install.packages('dplyr')
+if (!require(report)) install.packages('report')
+if (!require(rstatix)) install.packages('rstatix')
+if (!require(ggpubr)) install.packages('ggpubr')
+
+library(gsheet)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(report)
+library(rstatix)
+library(ggpubr)
+
+# Importação dos dados do Google Sheets
+dat_mg <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit?gid=983033137#gid=983033137")
+
+# Visualização dos dados com gráfico de dispersão
+ ggplot(dat_mg, aes(trat, comp)) +
+  geom_jitter(width = 0.1) +
+  theme_minimal()
+
+# Transformação para formato largo usando pivot_wider
+dat_mg2 <- dat_mg %>%
+  pivot_wider(names_from = "trat", values_from = "comp") %>%
+  select(-rep) # Remove coluna 'rep' se presente
+
+# Visualização das colunas, estrutura e primeiras linhas
+names(dat_mg2)
+glimpse(dat_mg2)
+head(dat_mg2)
+
+# Teste t entre os grupos control e Mg2
+attach(dat_mg2)
+t_test_results <- t.test(control, Mg2, var.equal = FALSE)
+detach(dat_mg2)
+
+# Relatório interpretativo
+test_report <- report(t_test_results)
+print(test_report)
+
+# Teste alternativo de t utilizando fórmula
+alt_t_test <- t.test(comp ~ trat, data = dat_mg)
+print(alt_t_test)
+
+# Teste de normalidade
+print(shapiro.test(dat_mg2$Mg2))
+print(shapiro.test(dat_mg2$control))
+
+# Histograma para verificar a distribuição
+tibble::tibble(Mg2 = dat_mg2$Mg2) %>%
+  ggplot(aes(x = Mg2)) +
+  geom_histogram(bins = 10, fill = "skyblue", color = "black") +
+  labs(title = "Histograma de Mg2", x = "Valores de comp", y = "Frequência") +
+  theme_minimal()
+
+tibble::tibble(Control = dat_mg2$control) %>%
+  ggplot(aes(x = Control)) +
+  geom_histogram(bins = 10, fill = "salmon", color = "black") +
+  labs(title = "Histograma de Controle", x = "Valores de comp", y = "Frequência") +
+  theme_minimal()
+
+# Teste de variâncias
+print(var.test(dat_mg2$Mg2, dat_mg2$control))
+
+# Criação de gráfico boxplot com p-valor
+# Criação do data frame de p-valor para o stat_pvalue_manual
+test_p <- data.frame(
+  group1 = "control",
+  group2 = "Mg2",
+  p.value = signif(t_test_results$p.value, 3),
+  y.position = max(dat_mg$comp) * 0.9
+)
+
+p <- ggboxplot(dat_mg,
+               x = "trat",
+               y = "comp",
+               color = "trat",
+               palette = "jco")
+
+p + stat_pvalue_manual(test_p, label = "p.value") +
+  ylim(0, max(dat_mg$comp) * 1.1) +
+  labs(title = "Boxplot de comp por tratamento com p-valor")
+
+# Comentários interpretativos
+# - Os histogramas permitem verificar a normalidade das distribuições.
+# - O teste de variâncias avalia homogeneidade (premissa do t-test).
+# - O t-test compara as médias de comp entre controle e Mg2.
+# - O boxplot final mostra visualmente as diferenças entre grupos, com p-valor embutido.
+
+```
+
+# Novo conjunto de dados - Test t amostras dependentes
+
+```{r}
+library(gsheet)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+# Importar os dados
+escala <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit?gid=1729131173#gid=1729131173")
+
+# Transformar em formato largo
+escala_wider <- escala %>%
+  pivot_wider(id_cols = rater, names_from = assessment, values_from = acuracia)
+
+# Verificar colunas
+names(escala_wider)
+
+# Teste t pareado
+t.test(escala_wider$Unaided, escala_wider$Aided1,
+       paired = TRUE,
+       var.equal = FALSE)
+
+# Boxplot
+escala %>%
+  ggplot(aes(x = assessment, y = acuracia)) +
+  geom_boxplot() +
+  labs(title = "Comparação da Acurácia por Assessment",
+       x = "Assessment",
+       y = "Acurácia")
+
+# Extrair vetores
+unaided <- escala %>%
+  filter(assessment == "Unaided") %>%
+  pull(acuracia)
+
+aided <- escala %>%
+  filter(assessment == "Aided1") %>%
+  pull(acuracia)
+
+# Teste de variância
+var.test(unaided, aided)
+
+# Histogramas
+hist(unaided, main = "Histograma - Unaided", xlab = "Acurácia")
+hist(aided, main = "Histograma - Aided1", xlab = "Acurácia")
+
+# Testes de normalidade
+shapiro.test(unaided)
+shapiro.test(aided)
+
+# Teste t não pareado
+t.test(unaided, aided, paired = FALSE, var.equal = FALSE)
+
+# Teste de Wilcoxon não pareado
+wilcox.test(unaided, aided, paired = FALSE)
+
+```
+
+```{r}
+library(car)
+library(gsheet)
+library(dplyr)
+library(ggplot2) # 
+micelial <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit?gid=959387827#gid=959387827")
+
+micelial %>%
+  ggplot(aes(x = especie, y = tcm)) +
+  geom_boxplot(outlier.color = NA) +
+  geom_jitter(width = 0.1)
+
+    
+anova1 <- aov(tcm ~ especie, data = micelial)
+anova2 <- lm(tcm ~ especie, data = micelial)
+ 
+anova(anova1)
+anova(anova2)
+hist(residuals(anova1))
+shapiro.test(residuals(anova1))
+
+# Rejeita hipotese nula p- valor 2.028e-07.
+
+# Shapiro test =  p-value = 0.8782 não rejeita.
+
+bartlett.test(tcm ~ especie, data = micelial)
+leveneTest(tcm ~ especie, data = micelial)
+
+
+# Para esse conjunto de dados, tem duas premissas legais.
+
+install.packages("emmeans")
+library(emmeans)
+
+m = emmeans(anova2, ~ especie)
+m
+
+install.packages("multcomp")
+library(multcomp)
+cld(m)
+pairs(m) # Ao inves da matriz, faz uma tabela
+pwpm(m) # Medias (comparando matriz)
+
+```
+
+```{r}
+```
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(rstatix)
+library(emmeans)
+library(multcomp)
+library(multcompView)
+
+insetos <- InsectSprays
+
+# Visualização inicial
+insetos |>
+  ggplot(aes(x = spray, y = count)) +
+  geom_boxplot(outlier.color = NA) +
+  geom_jitter(width = 0.1)
+
+# Verificação de premissas para ANOVA
+bartlett.test(count ~ spray, data = insetos)
+
+m2 <- lm(count ~ spray, data = insetos)
+hist(residuals(m2))
+shapiro.test(residuals(m2))
+qqnorm(residuals(m2))
+qqline(residuals(m2))
+
+# Cria coluna de ranks corretamente
+insetos <- insetos |>
+  mutate(rank_count = rank(count + 0.1))
+
+# ANOVA sobre ranks
+m3 <- lm(rank_count ~ spray, data = insetos)
+hist(residuals(m3))
+shapiro_test(residuals(m3))
+qqnorm(residuals(m3))
+qqline(residuals(m3))
+anova(m3)
+
+# Comparação de médias dos ranks entre grupos
+m33 <- emmeans(m3, ~ spray)
+cld(m33)
+plot(m33)
+
+# Kruskal-Wallis como alternativa não paramétrica
+kruskal.test(count ~ spray, data = insetos)
+
+```
+
+```{r}
+# Novo conjundo de dados
+
+library(ggplot2)
+
+insetos = InsectSprays # Comparar inseticidas diferentes
+
+insetos|>
+  ggplot(aes(x = spray, y = count)) +
+  geom_boxplot(outlier.color = NA) +
+  geom_jitter(width = 0.1)
+bartlett.test(count ~ spray, data = insetos)
+
+m2 <- lm(count ~ spray, data = insetos)
+hist(residuals(m2))
+library(rstatix) # Para shapiro_test
+shapiro_test(residuals(m2))
+qqnorm(residuals(m2))
+qqline(residuals(m2))
+library(performance)
+check_model(m2)
+
+## Alternativa 1 - transformar a resposta
+
+
+library(report)   # Para a função report
+
+m3 <- lm(rank(count + 0.1) ~ spray, data = insetos)
+hist(residuals(m3), main = "Histograma dos Resíduos", xlab = "Resíduos")
+shapiro_test(residuals(m3))
+qqnorm(residuals(m3))
+qqline(residuals(m3))
+anova(m3)
+report(m3)
+
+library(emmeans)
+m33 <- emmeans(m3, ~ spray, type = "response")
+library(multcompView)
+cld(m33)
+plot(m33)
+
+
+# Fazer o lm sem tranformar ***
+
+# Alternativa 2 - não parametrico #
+# O teste não-paramétrico equivalente à ANOVA é o Teste de Kruskal-Wallis.
+
+kruskal.test(count ~ spray, data = insetos)
+kruskal_test(insetos, count ~ spray)
+
+library(agricolae)
+kruskal.out <- with(insetos, kruskal(count, spray, group = TRUE,
+                                     console = TRUE))
+
+print(kruskal.out)
+
+library(DHARMa)
+## Alternativa paramétrica GLMs
+
+m4 <- glm(count - Spray, data = insetos,
+          family = poisson)
+
+anova(m4)
+library(car)
+Anova(m4)
+plot(simulateResiduals(m4))
+ library(performance)
+
+performance(m4)
+
+
+
+```
+
+# Aula 04
+
+```{r}
+
+library(DHARMa)
+m2
+plot(simulateResiduals(m3))
+
+
+```
+
+##Anova fatorial (twoway anova)
+
+```{r}
+antifungicos <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit?gid=2023059672#gid=2023059672")
+
+interaction.plot(antifungicos$dose, antifungicos$treat, antifungicos$severity)
+
+p1 <- antifungicos |> 
+  ggplot(aes(factor(dose), severity*100)) +
+  geom_jitter(width = 0.1)
+
+p2 <- antifungicos |> 
+  ggplot(aes(factor(dose), severity*100)) +
+  geom_jitter(width = 0.1)
+library(patchwork)
+p1 + p2
+
+```
+
+```{r}
+library(DHARMa)
+m_anti <- lm(severity ~ treat*dose, data = antifungicos)
+anova(m_anti) 
+
+plot(simulateResiduals(m_anti))
+
+media_anti <- emmeans(m_anti, ~treat | dose)
+media_anti
+library(multcomp)
+cld(media_anti) 
+library(agricolae)
+cv.model(m_anti)
+
+```
+
+|          | 0.5     | 2.0    |
+|----------|---------|--------|
+| LI       | 29.2 Aa | 5.0 Ab |
+| TEBU     | 2.1 Ba  | 2.0Aa  |
+| cv = 63% |         |        |
+
+```{r}
+library(epifitter)
+oidio <- PowderyMildew
+oidio2 <-oidio |> 
+  filter(irrigation_type %in% c ("MS", "MS above canopy", "Overhead"))
+
+oidio2 |> 
+  ggplot(aes(time,sev*100)) +
+  geom_point() +
+facet_grid( moisture ~ irrigation_type)
+
+oidio3 <- oidio2 |> 
+  group_by(irrigation_type, moisture, block) |> 
+  summarise(AUDPC = AUDPC(time, sev))
+
+oidio3 |> 
+  ggplot(aes(irrigation_type, 
+             AUDPC, color = moisture)) + 
+  geom_point(size = 2) +
+  scale_y_continuous(limits = c(0,20))
+
+```
+
+```{r}
+model_oidio <- lm(AUDPC ~ irrigation_type*moisture, data = oidio3)
+
+anova(model_oidio)
+
+plot(simulateResiduals(model_oidio))
+
+medias_oidio <- emmeans(model_oidio, ~ irrigation_type | moisture)
+
+medias_oidio
+library(multcomp)
+cld(medias_oidio)
+cv.model(model_oidio)
+
+```
+
+|            | H. Moisture | M. Moisture |
+|------------|-------------|-------------|
+| Irrigation |             |             |
+| MS         | 8,52 Aa     | 11,18 Ab    |
+| MS AC      | 3,99 Ba     | 4,86 Bb     |
+| OVERHEAD   | 3,68 Ba     | 3,81 Ca     |
+| CV = 6,41  |             |             |
+
+```{r}
+campo <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit?gid=866852711#gid=866852711") 
+
+cor(campo$FER, campo$PROD)
+cor.test(campo$FER, campo$DFC)
+campo |> 
+  ggplot(aes(FER, DFC)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+  
+
+campo |> 
+  mutate(TRAT = factor(TRAT)) |> 
+  ggplot(aes(TRAT, PROD)) +
+  geom_jitter(width = 0.1) +
+  stat_summary(
+    fun.data = "mean_cl_boot",
+    colour = "red", width = 0.3
+  )
+campo$TRAT <- factor(campo$TRAT)
+campo$BLOCO <- factor(campo$BLOCO)
+
+m_campo <- lm(log(FER) ~ BLOCO + TRAT, data = campo)
+
+anova(m_campo)
+
+library(DHARMa)
+library(emmeans)
+m_campo
+plot(simulateResiduals(m_campo))
+
+means_campo <- emmeans(m_campo, ~ TRAT, type = "response")
+means_campo
+cv.model(m_campo)
+plot(means_campo)
+library(multcomp)
+cld(means_campo)
+pwpm(means_campo) # comparativa dos tratamentos numa matriz
+```
+#  6 hibridos (parcela principal) x 2 métodos de inoculação x 4 blocos = 48 parcelas (24 parcelas pois são subdivididas) 
+```{r}
+milho <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit?gid=1345524759#gid=1345524759") 
+#parcelas subdivididas
+
+milho |>
+  ggplot(aes(hybrid, index, color = method)) +
+  geom_jitter(width = 0.1) +
+  coord_flip() #nome na horizontal no gráfico
+
+milho$hybrid_block <- interaction(milho$hybrid,milho$block) #criou-se a interação hibrido-bloco (método 1)
+
+milho |> 
+  mutate(hybrid_block = interaction(hybrid,block)) #criou-se a interação hibrido-bloco (método 2)
+
+library(lme4) #modelo misto (modelo aleatório)
+
+m_milho <- lmer(index  ~ hybrid*method + (1|block:hybrid_block), data = milho)
+car::Anova(m_milho)
+plot(simulateResiduals(m_milho))
+
+media_milho <- emmeans(m_milho, ~ method | hybrid)
+cld(media_milho, Letters = letters)
+
+m_milho2 <- lmer(yield  ~ hybrid*method + (1|block:hybrid_block), data = milho)
+car::Anova(m_milho2)
+plot(simulateResiduals(m_milho2))
+
+media_milho2 <- emmeans(m_milho2, ~ method | hybrid)
+cld(media_milho2, Letters = letters)
+
+
+```
+```{r}
+milho |> 
+  ggplot(aes(index, yield)) +
+  geom_point()+
+  geom_smooth(method = "lm")
+
+#variável associada a outra
+
+corl <- cor(milho$index, milho$yield)
+corl*corl*100
+cor.test(milho$index, milho$yield) #coeficiente de relação
+
+```
+## Transfotmação de dados
+
+### Box Cox
+
+```{r}
+library(MASS)
+library(DHARMa)
+library(dplyr)
+insects <- InsectSprays
+
+m1 <- lm(count ~ spray, data = insects)
+plot(simulateResiduals(m1))
+
+b <- boxcox(lm(insects$count + 0.1 ~ 1))
+lambda <- b$x[which.max(b$y)]
+lambda
+
+insects <- insects |> 
+  dplyr::mutate(count2 = (count^lambda - 1) / lambda) |> 
+  dplyr::mutate(count3 = sqrt(count))
+
+hist(insects$count)
+
+```
+## Análise de regressão
+
+```{r}
+library(gsheet)
+estande <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit?gid=401662555#gid=401662555")
+library(ggplot2)
+
+estande |> 
+  ggplot(aes(trat, nplants)) +
+         geom_point()+
+         geom_smooth(method = "lm", se = FALSE) +
+       facet_wrap(~ exp) +
+  theme_minimal() +
+labs(x = "% de inóculo", 
+     y = "Número de plantas")
+```
+```{r}
+## Análise de regressão
+
+exp1 <- estande |> 
+  filter(exp == 1) |> 
+  group_by(trat) |> 
+  summarize(nplants2 = mean(nplants))
+
+exp1 |> 
+  ggplot(aes(trat, nplants2)) +
+  geom_point()+
+  ylim(20,60)
+
+m_exp1 <- lm(nplants ~ trat, data = exp1)
+summary(m_exp1)
+
+exp2 <- estande |> 
+  filter(exp == 2)
+
+m_exp2 <- lm(nplants ~ trat, data = exp2)
+summary(m_exp2)
+
+exp3 <- estande |> 
+  filter(exp == 3)
+
+m_exp3 <- lm(nplants ~ trat, data = exp3)
+summary(m_exp3)
+```
+## Modelo Misto
+
+```{r}
+library(lme4)
+m_misto <- lmer(nplants ~ trat + (1 | exp/bloco),
+                data = estande)
+confint(m_misto)
+summary(m_misto)
+car::Anova(m_misto)
+
+
+```
+```{r}
+estande |> 
+  ggplot(aes(trat, nplants, color = factor(exp))) +
+  geom_point() +
+  #geom_smooth(method = "lm", se = FALSE) +
+  geom_abline(intercept = 69.74, 
+              slope = -0.568, linewidth = 2) +
+  geom_abline(intercept = 43, 
+              slope = -0.73, linetype = "dashed") +
+  geom_abline(intercept = 96, 
+              slope = -0.40, linetype = "dashed")
+ 
+```
+## Regressão não linear
+
+```{r}
+
+fungi <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit?gid=465348652#gid=465348652")
+
+#vizualiza
+
+fungi |> 
+  group_by(code, dose) |> 
+  summarise(germination = mean(germination)) |> 
+  ggplot(aes(dose, germination)) +
+  geom_point()+
+  geom_line() +
+  facet_wrap(~ code)
+
+#Ajuste de modelo não linear para um isolado
+
+FGT43 <- fungi |> 
+  group_by(code, dose) |> 
+  summarize(germination = mean(germination)) |> 
+  filter(code == "FGT43")
+
+library(drc)
+
+m43 <- drm(germination ~ dose, 
+           data = FGT43,
+           fct = LL.3())
+# AIC - quanto menor melhor LL.3 foi melhor que W2.3 e W1.3
+# Tem que testar para outros isolados
+summary(m43)
+AIC(m43)
+plot(m43)
+ED(m43, 50) #estimando Ec50
+
+library(ec50estimator)
+
+df_ec50 = estimate_EC50(germination ~ dose,
+                        data = fungi,
+                        isolate_col = "code",
+                        strata_col = "state",
+                        interval = "delta",
+                        fct = drc::LL.3())
+
+df_ec50 |> 
+  ggplot(aes(reorder(ID, Estimate), Estimate)) +
+  geom_point()+
+  coord_flip()
+
+df_ec50 |> 
+  ggplot(aes(x = Estimate)) +
+  geom_histogram(bins = 5, color = "white")
+  
+  
+
+
+
+
+
+
+```
+```{r}
+
+```
+

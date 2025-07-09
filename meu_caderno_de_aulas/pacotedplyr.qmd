@@ -1,0 +1,164 @@
+---
+title: "Pacotes"
+format: html
+---
+
+## Pacote`Dplyr`
+
+O dplyr é um pacote do R voltado para manipulação e transformação de dados de forma rápida, clara e intuitiva. Ele faz parte do tidyverse, o conjunto de pacotes para ciência de dados no R. Seu principal objetivo é facilitar o trabalho com data frames, permitindo filtrar, selecionar, agrupar, ordenar, resumir e transformar dados de maneira organizada.
+
+### Principais funções:
+
+**`filter()`** – Seleciona **linhas** com base em condições.
+
+**`select()`** – Seleciona **colunas** específicas.
+
+**`mutate()`** – Cria **novas colunas** ou transforma colunas existentes.
+
+**`arrange()`** – Ordena as linhas por uma ou mais colunas.
+
+**`summarise()`** – Resume os dados, gerando estatísticas (média, soma, etc).
+
+**`group_by()`** – Agrupa os dados por categorias para realizar resumos em cada grupo.
+
+### Trabalhando em um conjunto de dados
+
+Carregar o pacote
+
+```{r}
+#| message: false
+#| warning: false
+library(dplyr)
+```
+
+Importar dados
+
+```{r}
+library(gsheet)
+dados_nuvem <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit?gid=465348652#gid=465348652")
+
+dados_mg <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit?gid=983033137#gid=983033137")
+
+dados_survey <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit?gid=1118819738#gid=1118819738")
+
+```
+
+Manipulação
+
+```{r}
+dados_survey |>
+  group_by(species) |>
+  count() #Conta quantas observações existem em dados_survey para cada species.
+
+dados_survey |>
+  group_by(residue) |>
+  count() #Conta quantas observações existem para cada tipo de residue.
+
+dados_survey |>
+  group_by(state, residue) |>
+  count() #Conta o número de observações para cada combinação de state e residue.
+
+RS <- dados_survey |>
+  filter(state== "RS")
+
+PR <- dados_survey |>
+  filter(state== "PR") #filtrando dados por estado criando dois data frames
+
+combinado <- rbind(RS, PR) #Combina os dois em um único data frame.
+
+survey_b <- dados_survey |>
+  select(year, state, species) #Cria survey_b contendo apenas as colunas year, state e species.
+
+survey_2009 <- dados_survey |>
+  select(year, state, species) |>
+  filter(year== 2009)
+
+survey_2010 <- dados_survey |>
+  select(year, state, species) |>
+  filter(year== 2010)
+
+survey_2011 <- dados_survey |>
+  select(year, state, species) |>
+  filter(year== 2011) #Filtra dados por ano
+```
+
+## Pacote `janitor`
+
+O pacote é utilizado para limpeza e organização de dados, focado em deixar nomes de colunas limpos e consistentes; gerar tabelas de contingência prontas para relatórios; facilitar detecção de valores duplicados ou ausentes. Ele é extremamente útil em análises exploratórias, relatórios e pré-processamento de dados, tornando o fluxo de trabalho mais limpo e rápido.
+
+### Principais funções:
+
+**`clean_names()` -** Limpa os nomes das colunas, transformando-os em nomes minúsculos e separados por `_`, removendo espaços e caracteres especiais.
+
+**`tabyl()`**- Cria **tabelas de frequência (contingência)** de forma rápida.
+
+**`adorn_*`**-Funções para **adicionar percentuais, totais de linha/coluna e formatação** em tabelas geradas por `tabyl()`:
+
+-   `adorn_totals()` – adiciona totais.
+
+-   `adorn_percentages()` – adiciona percentuais.
+
+-   `adorn_rounding()` – arredonda valores.
+
+```{r}
+#| message: false
+#| warning: false
+library(janitor)
+
+survey_b |> tabyl(state, species) #Gera uma tabela cruzada mostrando quantas observações existem de cada species por state.
+
+survey_b |> tabyl(species, year) #Gera uma tabela cruzada mostrando quantas observações existem de cada species por year.
+
+```
+
+## Pacote `tidyr`
+
+É um pacote do tidyverse que fornece ferramentas para arrumar (tidy) dados no R, deixando-os em um formato limpo e organizado, o que facilita análises e visualizações.
+
+### Principais funções:
+
+`pivot_longer()` - transforma colunas em linhas. Útil para converter formato largo ➔ formato longo.
+
+`pivot_wider()` - Transforma linhas em colunas. Útil para converter formato longo ➔ formato largo.
+
+`separate()` - Separa uma coluna em múltiplas colunas, com base em um separador.
+
+`unite()` - Combina múltiplas colunas em uma única coluna.
+
+```{r}
+library(tidyr)
+```
+
+```{r}
+#| include: false
+library(gsheet)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(report)
+library(rstatix)
+library(ggpubr)
+
+# Importação dos dados do Google Sheets
+dat_mg <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit?gid=983033137#gid=983033137")
+
+# Visualização dos dados com gráfico de dispersão
+ ggplot(dat_mg, aes(trat, comp)) +
+  geom_jitter(width = 0.1) +
+  theme_minimal()
+```
+
+```{r}
+# Transformação para formato largo usando pivot_wider
+dat_mg2 <- dat_mg %>%
+  pivot_wider(names_from = "trat", values_from = "comp") %>%
+  select(-rep) # Remove coluna 'rep' se presente
+
+# Visualização das colunas, estrutura e primeiras linhas
+names(dat_mg2)
+glimpse(dat_mg2)
+head(dat_mg2)
+
+#glimpse() para ver tipos de dados + primeiros valores por coluna (estrutura).
+#head() para ver as primeiras linhas dos dados (conteúdo).
+```

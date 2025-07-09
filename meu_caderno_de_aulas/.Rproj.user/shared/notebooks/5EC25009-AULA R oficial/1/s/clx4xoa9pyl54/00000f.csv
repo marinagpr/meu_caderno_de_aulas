@@ -1,0 +1,6 @@
+"0",""
+"0","library(tidyverse)"
+"0","dates <- c(7,14,21,28,35,42) # days"
+"0","severity <- c(0.1,5,10,35,50,60)"
+"0","data_curva<-data.frame(dates,severity)"
+"0","data_curva"

@@ -1,0 +1,15 @@
+{
+  "hash": "e729c4a9b94a14481bad4e1972bec21f",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Importação de dados\"\nformat: html\n---\n\n\n\n\n### Leitura dos arquivos\n\n-   Baixar o pacote que ler dados em arquivos\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(tidyverse)\n```\n:::\n\n\n\n\n### Importar conjunto de dados disponíveis no **R**\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\ndados <- Orange\nOrange\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n   Tree  age circumference\n1     1  118            30\n2     1  484            58\n3     1  664            87\n4     1 1004           115\n5     1 1231           120\n6     1 1372           142\n7     1 1582           145\n8     2  118            33\n9     2  484            69\n10    2  664           111\n11    2 1004           156\n12    2 1231           172\n13    2 1372           203\n14    2 1582           203\n15    3  118            30\n16    3  484            51\n17    3  664            75\n18    3 1004           108\n19    3 1231           115\n20    3 1372           139\n21    3 1582           140\n22    4  118            32\n23    4  484            62\n24    4  664           112\n25    4 1004           167\n26    4 1231           179\n27    4 1372           209\n28    4 1582           214\n29    5  118            30\n30    5  484            49\n31    5  664            81\n32    5 1004           125\n33    5 1231           142\n34    5 1372           174\n35    5 1582           177\n```\n\n\n:::\n:::\n\n\n\n\n### Importar conjunto de dados em planilhas do Google\n\n-   O primeiro passo é carregar o pacote `gsheet`\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(gsheet)\n```\n:::\n\n\n\n\n-   Então importar a planilha a partir da função `gsheet2tbl` e o link do google\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\ndados_nuvem <- gsheet2tbl(\"https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit?gid=465348652#gid=465348652\")\n```\n:::\n\n\n\n\n### Importar conjunto de dados em arquivos excel\n\n-   Carregar o pacote `readxl`\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(readxl)\n```\n:::\n\n\n\n\n-   Adicionar a planilha dentro da pasta do projeto;\n\n-   Importar os dados com a função `read_excel`\n\n-   Abrir um chunk colocar: dados \\<- read_excel (\"dados-exemplo.xlsx\")\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

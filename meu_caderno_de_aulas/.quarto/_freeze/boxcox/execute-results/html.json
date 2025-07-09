@@ -1,0 +1,17 @@
+{
+  "hash": "0c78484f2d95cf6331e636771f3e3d0f",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Transformação Box-Cox\"\nformat: html\neditor: \n  markdown: \n    wrap: 72\n---\n\n\n\n\nA transformação de Box-Cox é uma técnica estatística utilizada para\ntransformar variáveis contínuas de forma a aproximar a normalidade e\nestabilizar a variância, sendo particularmente útil em análises que\nexigem estas premissas, como regressões lineares e ANOVA. Proposta por\nBox e Cox em 1964, a transformação aplica uma função matemática\nparametrizada por lambda (𝜆), que define o tipo de transformação a ser\nutilizada nos dados, variando desde a transformação logarítmica (quando\n𝜆 = 0) até outras formas como raiz quadrada ou inversa, conforme o valor\nde lambda que maximiza a verossimilhança dos dados transformados. A\nescolha do valor ótimo de 𝜆 é realizada de forma a garantir que os\nresíduos do modelo apresentem distribuição aproximadamente normal e\nvariâncias homogêneas, melhorando a qualidade do ajuste e a\nconfiabilidade dos testes estatísticos aplicados posteriormente. Assim,\na transformação de Box-Cox é uma ferramenta prática no pré-processamento\nde dados, auxiliando na adequação dos conjuntos de dados às exigências\ndos métodos paramétricos utilizados em análises estatísticas\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(MASS)\nlibrary(DHARMa)\nlibrary(dplyr)\ninsects <- InsectSprays\n\nm1 <- lm(count ~ spray, data = insects)\nplot(simulateResiduals(m1))\n```\n\n::: {.cell-output-display}\n![](boxcox_files/figure-html/unnamed-chunk-1-1.png){width=672}\n:::\n\n```{.r .cell-code}\nb <- boxcox(lm(insects$count + 0.1 ~ 1))\n```\n\n::: {.cell-output-display}\n![](boxcox_files/figure-html/unnamed-chunk-1-2.png){width=672}\n:::\n\n```{.r .cell-code}\nlambda <- b$x[which.max(b$y)]\nlambda\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n[1] 0.4242424\n```\n\n\n:::\n\n```{.r .cell-code}\ninsects <- insects |> \n  dplyr::mutate(count2 = (count^lambda - 1) / lambda) |> \n  dplyr::mutate(count3 = sqrt(count))\n\nhist(insects$count)\n```\n\n::: {.cell-output-display}\n![](boxcox_files/figure-html/unnamed-chunk-1-3.png){width=672}\n:::\n:::\n\n\n\n\nEste código fornece:\n\n-   Diagnóstico de resíduos do modelo linear (para avaliar se os\n    pressupostos são atendidos).\n\n-   O valor ótimo de lambda para a transformação de Box-Cox para seus\n    dados de contagem.\n\n-   Duas variáveis transformadas (count2 e count3) para futuras análises\n    com melhor conformidade aos pressupostos de normalidade e\n    homocedasticidade.\n\n-   Um histograma para visualizar a distribuição original antes de\n    verificar a transformação.\n\nAssim, ele prepara os dados para análises estatísticas mais robustas em\ndados de contagem, como ANOVA ou modelos lineares mistos, minimizando\nproblemas de violação de pressupostos.\n",
+    "supporting": [
+      "boxcox_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

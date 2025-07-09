@@ -1,0 +1,15 @@
+{
+  "hash": "4464b74206d052ae964a7d59319ea7f5",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Definição e Instalação\"\nformat: html\n---\n\n\n\n\n## O que é o R?\n\n**É** uma **linguagem de programação** e **um ambiente de software** criado em 1993 por **Ross Ihaka e Robert Gentleman** na Nova Zelândia e se baseia no **linguagem S** (da Bell Labs), usado para:\n\n-   **Estatística** (testes, modelagens, análises);\n\n-   **Ciência de dados;**\n\n-   **Visualização de dados** (gráficos simples e avançados).\n\n## Como instalar?\n\n### Instalar o **R**\n\n#### **Download:**\n\n-   Acesse: https://cran.r-project.org\n\n-   Clique em **Download R for Windows** (ou Mac, ou Linux, conforme seu sistema);\n\n-   Clique em **base** e depois em **Download R x.x.x for Windows**;\n\n-   Baixe e execute o instalador.\n\n#### Instalação:\n\n-   Clique em **Avançar** em todas as etapas;\n\n-   Mantenha as opções padrão;\n\n-   O R estará instalado, mas o uso via console é básico.\n\n### Instalar o **RStudio** (IDE que facilita o uso do R)\n\n#### **Download:**\n\n-   Acesse: https://posit.co/download/rstudio-desktop/\n\n-   Clique em **Download** (versão gratuita - RStudio Desktop).\n\n-   Baixe e execute o instalador.\n\n#### **Instalação:**\n\n-   Clique em **Avançar** em todas as etapas;\n\n-   Ao finalizar, abra o **RStudio**.\n\n#### Verificar se funcionou\n\n-   Abra o **RStudio** e digite no console:\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\n2 + 2\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n[1] 4\n```\n\n\n:::\n:::\n\n\n\n\n-   Deve aparecer:\n\n```         \n[1] 4\n```\n\nPronto, o R está instalado e funcionando!\n\n## Baixando pacotes\n\n-   Para instalar pacotes necessários para rodar funções abra um chunk e escreva `library`\n\n-   E entre parênteses adicione o nome do pacote para carregar\n\n-   Se você não o possui, vá a aba packages \\> install e então escreva o nome do pacote desejado e depois carrege-o como no esquema abaixo:\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(agricolae)\n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

@@ -1,0 +1,30 @@
+"0","#| include: false"
+"0","library(gsheet)"
+"0","library(ggplot2)"
+"0","library(tidyr)"
+"0","library(dplyr)"
+"0","library(report)"
+"0","library(rstatix)"
+"2","
+Anexando pacote: ‘rstatix’
+
+"
+"2","O seguinte objeto é mascarado por ‘package:janitor’:
+
+    make_clean_names
+
+"
+"2","O seguinte objeto é mascarado por ‘package:stats’:
+
+    filter
+
+"
+"0","library(ggpubr)"
+"0",""
+"0","# Importação dos dados do Google Sheets"
+"0","dat_mg <- gsheet2tbl(""https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit?gid=983033137#gid=983033137"")"
+"0",""
+"0","# Visualização dos dados com gráfico de dispersão"
+"0"," ggplot(dat_mg, aes(trat, comp)) +"
+"0","  geom_jitter(width = 0.1) +"
+"0","  theme_minimal()"

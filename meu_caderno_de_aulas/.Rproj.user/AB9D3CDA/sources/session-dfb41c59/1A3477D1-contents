@@ -1,0 +1,80 @@
+---
+title: "Definição e Instalação"
+format: html
+---
+
+## O que é o R?
+
+**É** uma **linguagem de programação** e **um ambiente de software** criado em 1993 por **Ross Ihaka e Robert Gentleman** na Nova Zelândia e se baseia no **linguagem S** (da Bell Labs), usado para:
+
+-   **Estatística** (testes, modelagens, análises);
+
+-   **Ciência de dados;**
+
+-   **Visualização de dados** (gráficos simples e avançados).
+
+## Como instalar?
+
+### Instalar o **R**
+
+#### **Download:**
+
+-   Acesse: https://cran.r-project.org
+
+-   Clique em **Download R for Windows** (ou Mac, ou Linux, conforme seu sistema);
+
+-   Clique em **base** e depois em **Download R x.x.x for Windows**;
+
+-   Baixe e execute o instalador.
+
+#### Instalação:
+
+-   Clique em **Avançar** em todas as etapas;
+
+-   Mantenha as opções padrão;
+
+-   O R estará instalado, mas o uso via console é básico.
+
+### Instalar o **RStudio** (IDE que facilita o uso do R)
+
+#### **Download:**
+
+-   Acesse: https://posit.co/download/rstudio-desktop/
+
+-   Clique em **Download** (versão gratuita - RStudio Desktop).
+
+-   Baixe e execute o instalador.
+
+#### **Instalação:**
+
+-   Clique em **Avançar** em todas as etapas;
+
+-   Ao finalizar, abra o **RStudio**.
+
+#### Verificar se funcionou
+
+-   Abra o **RStudio** e digite no console:
+
+```{r}
+2 + 2
+```
+
+-   Deve aparecer:
+
+```         
+[1] 4
+```
+
+Pronto, o R está instalado e funcionando!
+
+## Baixando pacotes
+
+-   Para instalar pacotes necessários para rodar funções abra um chunk e escreva `library`
+
+-   E entre parênteses adicione o nome do pacote para carregar
+
+-   Se você não o possui, vá a aba packages \> install e então escreva o nome do pacote desejado e depois carrege-o como no esquema abaixo:
+
+```{r}
+library(agricolae)
+```

@@ -1,0 +1,7 @@
+"0","library(ggplot2)"
+"0","survey_b |>"
+"0","  group_by(year, species) |>"
+"0","  count() |>"
+"0","  ggplot(aes(year, n, fill = species)) +"
+"0","  geom_col() +"
+"0","  scale_fill_manual(values = c(""purple"", ""yellow"")) "

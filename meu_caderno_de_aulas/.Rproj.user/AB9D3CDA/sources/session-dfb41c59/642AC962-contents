@@ -1,0 +1,110 @@
+---
+title: "Teste t"
+format: html
+---
+
+O **teste t** é uma ferramenta estatística utilizada para **comparar as médias de dois grupos** e verificar se existe diferença significativa entre eles. Ele é amplamente utilizado em experimentos agrícolas, biológicos e em diversas áreas de pesquisa onde se deseja comparar tratamentos. Existem dois tipos principais de teste t:
+
+-   **Teste t para amostras independentes**: usado quando os grupos são diferentes entre si (ex: controle vs. tratamento).
+
+-   **Teste t pareado**: utilizado quando os dados estão emparelhados (ex: antes e depois de um tratamento no mesmo local).
+
+```{r}
+#| include: false
+library(gsheet)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(report)
+library(rstatix)
+library(ggpubr)
+
+# Importação dos dados do Google Sheets
+dat_mg <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit?gid=983033137#gid=983033137")
+
+# Visualização dos dados com gráfico de dispersão
+ ggplot(dat_mg, aes(trat, comp)) +
+  geom_jitter(width = 0.1) +
+  theme_minimal()
+
+# Transformação para formato largo usando pivot_wider
+dat_mg2 <- dat_mg %>%
+  pivot_wider(names_from = "trat", values_from = "comp") %>%
+  select(-rep) # Remove coluna 'rep' se presente
+
+# Visualização das colunas, estrutura e primeiras linhas
+names(dat_mg2)
+glimpse(dat_mg2)
+head(dat_mg2)
+```
+
+#### Exemplo:
+
+-   **Para amostras independentes**
+
+```{r}
+#| warning: false
+# Teste t entre os grupos control e Mg2
+attach(dat_mg2)
+t_test_results <- t.test(control, Mg2, var.equal = FALSE) #teste t para comparação de médias entre os tratamentos control e Mg2
+detach(dat_mg2)
+
+test_report <- report(t_test_results)
+print(test_report) #relatório textual interpretativo do teste t, explicando p-valor, tamanho do efeito e interpretação.
+```
+
+-   Diferença entre as médias = **5,16** (ou seja, control é, em média, 5,16 pontos maior que Mg2).
+
+<!-- -->
+
+-    Intervalo de confiança de 95% para a diferença = **\[3,83; 6,49\]**, indicando que a diferença é estatisticamente robusta, e mesmo no pior cenário (limite inferior) a diferença ainda é de 3,83.
+
+<!-- -->
+
+-   Valor do teste t = **8,15**
+
+<!-- -->
+
+-    Graus de liberdade ajustados (pelo Welch) = **17,35**
+
+-   **p \< 0,001**, ou seja, **diferença estatisticamente significativa** (rejeitamos a hipótese nula de médias iguais).
+
+O que isso quer dizer?
+
+**O** **tratamento control apresentou valores significativamente maiores de `comp` do que Mg2**.
+
+-   **Teste t pareado**:
+
+```{r}
+#| include: false
+library(gsheet)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+# Importar os dados
+escala <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit?gid=1729131173#gid=1729131173")
+
+# Transformar em formato largo
+escala_wider <- escala %>%
+  pivot_wider(id_cols = rater, names_from = assessment, values_from = acuracia)
+
+# Verificar colunas
+names(escala_wider)
+
+```
+
+```{r}
+t.test(escala_wider$Unaided, escala_wider$Aided1,
+       paired = TRUE,
+       var.equal = FALSE) #compara as médias de acurácia entre os estados "Unaided" e "Aided1"
+
+# Boxplot
+escala %>%
+  ggplot(aes(x = assessment, y = acuracia)) +
+  geom_boxplot() +
+  labs(title = "Comparação da Acurácia por Assessment",
+       x = "Assessment",
+       y = "Acurácia")
+#visualiza a distribuição dos valores de acurácia em cada grupo de avaliação.
+```
