@@ -1,4 +1,0 @@
-"0",""
-"0","dados_survey |>"
-"0","  group_by(residue) |>"
-"0","  count()"

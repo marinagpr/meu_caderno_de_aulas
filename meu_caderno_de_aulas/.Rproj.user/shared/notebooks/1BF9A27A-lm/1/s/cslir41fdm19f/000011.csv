@@ -1,5 +1,0 @@
-"0",""
-"0","milho$hybrid_block <- interaction(milho$hybrid,milho$block) #criou-se a interação hibrido-bloco (método 1)"
-"0",""
-"0","milho |> "
-"0","  mutate(hybrid_block = interaction(hybrid,block)) #criou-se a interação hibrido-bloco (método 2)"
