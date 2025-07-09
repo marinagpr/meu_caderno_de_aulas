@@ -1,8 +1,0 @@
-"0",""
-"0","# Cria coluna de ranks corretamente"
-"0","insetos <- insetos |>"
-"0","  mutate(rank_count = rank(count + 0.1))"
-"0",""
-"0","# ANOVA sobre ranks"
-"0","m3 <- lm(rank_count ~ spray, data = insetos)"
-"0","hist(residuals(m3))"
